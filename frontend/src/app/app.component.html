@@ -1,0 +1,285 @@
+<div class="max-w-[1280px] mx-auto px-10 pb-8 pt-0">
+
+  <!-- APP BAR -->
+  <div class="flex items-center gap-[14px] py-5 border-b border-border mb-6">
+    <div class="w-10 h-10 rounded-[11px] flex items-center justify-center text-[0.95rem] font-bold text-white shrink-0 shadow-[0_4px_14px_rgba(91,138,240,0.3)] bg-gradient-to-br from-[#5B8AF0] to-[#7C5CFC] tracking-[-0.5px]">TH</div>
+    <div>
+      <div class="text-[1.05rem] font-bold text-on-surf leading-tight">The Hartford India</div>
+      <div class="text-[0.73rem] text-on-var mt-0.5">LinkedIn Competitive Intelligence &mdash; Vanguard &middot; Chubb &middot; HCA Healthcare &middot; Lloyds &middot; Carelon</div>
+    </div>
+    <div class="flex-1"></div>
+    <div class="inline-flex items-center gap-1.5 bg-surf-1 border border-border-med rounded-[20px] px-3.5 py-1.5 text-[0.72rem] text-on-var tabular-nums">
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#10B981"><path [attr.d]="iconClock"/></svg>
+      {{ currentDate | date:'dd MMM yyyy, HH:mm' }}
+    </div>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="grid grid-cols-4 gap-4 mb-8" *ngIf="stats">
+    
+    <!-- Needs Action -->
+    <div class="kpi-card !border-t-error">
+      <div class="w-9 h-9 rounded-md flex items-center justify-center bg-error/10 mb-1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#EF4444"><path [attr.d]="iconBell"/></svg>
+      </div>
+      <div class="text-[2rem] font-bold text-on-surf leading-none tracking-[-1px]">{{ stats.high_priority }}</div>
+      <div class="text-[0.68rem] font-semibold text-on-var uppercase tracking-[1.1px]">Needs Action</div>
+    </div>
+
+    <!-- Watch -->
+    <div class="kpi-card !border-t-warning">
+      <div class="w-9 h-9 rounded-md flex items-center justify-center bg-warning/10 mb-1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B"><path [attr.d]="iconWarning"/></svg>
+      </div>
+      <div class="text-[2rem] font-bold text-on-surf leading-none tracking-[-1px]">{{ stats.medium }}</div>
+      <div class="text-[0.68rem] font-semibold text-on-var uppercase tracking-[1.1px]">Watch</div>
+    </div>
+
+    <!-- Routine -->
+    <div class="kpi-card !border-t-success">
+      <div class="w-9 h-9 rounded-md flex items-center justify-center bg-success/10 mb-1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#10B981"><path [attr.d]="iconCheck"/></svg>
+      </div>
+      <div class="text-[2rem] font-bold text-on-surf leading-none tracking-[-1px]">{{ stats.low }}</div>
+      <div class="text-[0.68rem] font-semibold text-on-var uppercase tracking-[1.1px]">Routine</div>
+    </div>
+
+    <!-- Avg Engagement -->
+    <div class="kpi-card !border-t-primary">
+      <div class="w-9 h-9 rounded-md flex items-center justify-center bg-primary/10 mb-1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#5B8AF0"><path [attr.d]="iconTrend"/></svg>
+      </div>
+      <div class="text-[2rem] font-bold text-on-surf leading-none tracking-[-1px]">{{ stats.avg_engagement }}</div>
+      <div class="text-[0.68rem] font-semibold text-on-var uppercase tracking-[1.1px]">Avg Engagement</div>
+    </div>
+
+  </div>
+
+  <!-- SECTION: ENGAGEMENT VS THEMES -->
+  <div class="sec-hdr">
+    <div class="sec-accent"></div>
+    <span class="sec-title"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#5B8AF0"><path [attr.d]="iconChart"/></svg> Engagement vs Themes</span>
+    <span class="sec-line"></span>
+  </div>
+
+  <div class="bordered-container grid grid-cols-2 gap-8 mb-8">
+    <div class="h-[260px] flex flex-col">
+      <p class="text-[14px] text-[#CBD5E1] mb-2">Avg Engagement by Company</p>
+      <div class="flex-1 relative">
+        <canvas #barChart></canvas>
+      </div>
+    </div>
+    <div class="h-[260px] flex flex-col overflow-hidden">
+      <p class="text-[14px] text-[#CBD5E1] mb-2">Industry Share of Voice by Theme</p>
+      <div class="flex-1 flex items-center">
+        <div class="w-[180px] h-[180px] relative shrink-0">
+          <canvas #pieChart></canvas>
+        </div>
+        <div class="ml-6 flex flex-col gap-2.5 overflow-y-auto max-h-[190px] pr-2">
+          <div *ngFor="let t of charts?.themes; let i = index" class="flex items-center gap-2.5 text-[12px] text-on-var">
+            <span class="w-3 h-3 rounded-[3px] shrink-0" [ngStyle]="{'background-color': pieColors[i % pieColors.length]}"></span>
+            <span class="truncate max-w-[200px]" [title]="t.theme">{{ t.theme }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: DOWNLOAD CENTER -->
+  <div class="sec-hdr">
+    <div class="sec-accent"></div>
+    <span class="sec-title"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#5B8AF0"><path [attr.d]="iconDownload"/></svg> Download Center</span>
+    <span class="sec-line"></span>
+  </div>
+
+  <div class="bordered-container mb-8">
+    <p class="text-[0.78rem] text-on-var mb-3.5">Export post data as CSV or Excel &mdash; filter by company, post count, or date range.</p>
+    
+    <div class="grid grid-cols-3 gap-4 mb-4">
+      <div>
+        <label class="block text-[0.71rem] font-semibold text-on-var uppercase tracking-[0.9px] mb-1.5">Company</label>
+        <select [(ngModel)]="dlCompany" class="w-full bg-surf-2 border border-border-med rounded-xl px-3 py-2 text-[0.85rem] text-on-surf focus:outline-none focus:border-primary">
+          <option *ngFor="let c of companies" [value]="c">{{ c }}</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-[0.71rem] font-semibold text-on-var uppercase tracking-[0.9px] mb-1.5">Filter By</label>
+        <div class="flex items-center gap-4 mt-2">
+          <label class="flex items-center gap-2 text-[0.85rem] text-on-surf cursor-pointer">
+            <input type="radio" name="dlMode" [(ngModel)]="dlFilterMode" value="Past N posts" class="accent-error"> Past N posts
+          </label>
+          <label class="flex items-center gap-2 text-[0.85rem] text-on-surf cursor-pointer">
+            <input type="radio" name="dlMode" [(ngModel)]="dlFilterMode" value="Past N days" class="accent-error"> Past N days
+          </label>
+        </div>
+      </div>
+      <div>
+        <label class="block text-[0.71rem] font-semibold text-on-var uppercase tracking-[0.9px] mb-1.5">{{ dlFilterMode === 'Past N posts' ? 'Posts' : 'Time window' }}</label>
+        <select *ngIf="dlFilterMode === 'Past N posts'" [(ngModel)]="dlPostsLimit" class="w-full bg-surf-2 border border-border-med rounded-xl px-3 py-2 text-[0.85rem] text-on-surf focus:outline-none focus:border-primary">
+          <option *ngFor="let o of dlPostOptions" [value]="o">{{ o }}</option>
+        </select>
+        <select *ngIf="dlFilterMode === 'Past N days'" [(ngModel)]="dlDaysLimit" class="w-full bg-surf-2 border border-border-med rounded-xl px-3 py-2 text-[0.85rem] text-on-surf focus:outline-none focus:border-primary">
+          <option *ngFor="let o of dlDaysOptions" [value]="o">Past {{ o }} days</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Preview Badge -->
+    <div class="inline-flex items-center gap-1.5 bg-primary-dim text-[#93C5FD] border border-primary/20 rounded-full px-3.5 py-1 text-[0.73rem] font-medium mb-3">
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#93C5FD"><path [attr.d]="iconChecklist"/></svg>
+      {{ filteredDownloadPosts.length }} posts &middot; {{ dlFilterMode === 'Past N posts' ? (dlPostsLimit === 'All' ? 'all posts' : 'last ' + dlPostsLimit + ' posts') : 'past ' + dlDaysLimit + ' days' }}
+    </div>
+
+    <!-- Table Preview -->
+    <div class="bg-surf-2 rounded-xl border border-border overflow-x-auto mb-3">
+      <table class="w-full text-left border-collapse text-[13px] text-on-surf">
+        <thead>
+          <tr class="border-b border-border">
+            <th class="py-2 px-3 font-semibold text-on-var">Company</th>
+            <th class="py-2 px-3 font-semibold text-on-var">Date</th>
+            <th class="py-2 px-3 font-semibold text-on-var">Post Description</th>
+            <th class="py-2 px-3 font-semibold text-on-var">Content Classification</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of filteredDownloadPosts | slice:0:3" class="border-b border-border last:border-0 hover:bg-white/5">
+            <td class="py-2 px-3 whitespace-nowrap">{{ p.company }}</td>
+            <td class="py-2 px-3 whitespace-nowrap">{{ p.timestamp | date:'yyyy-MM-dd HH:mm' }}</td>
+            <td class="py-2 px-3 truncate max-w-[300px]">{{ p.text }}</td>
+            <td class="py-2 px-3 truncate max-w-[200px]">{{ p.analysis?.content_classification }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex gap-2">
+      <button class="btn-download flex-1 py-2" (click)="downloadCSV()">Download CSV</button>
+      <button class="btn-download flex-1 py-2" (click)="downloadExcel()">Download Excel</button>
+    </div>
+  </div>
+
+  <!-- SECTION: INTELLIGENCE FEED -->
+  <div class="sec-hdr">
+    <div class="sec-accent"></div>
+    <span class="sec-title"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#5B8AF0"><path [attr.d]="iconSearch"/></svg> Intelligence Feed</span>
+    <span class="sec-line"></span>
+  </div>
+
+  <div class="bordered-container mb-8">
+    <div class="grid grid-cols-4 gap-4 mb-4">
+      <div>
+        <label class="block text-[0.71rem] font-semibold text-on-var uppercase tracking-[0.9px] mb-1.5">Company</label>
+        <select [(ngModel)]="feedCompany" (change)="loadFeed()" class="w-full bg-surf-2 border border-border-med rounded-xl px-3 py-2 text-[0.85rem] text-on-surf focus:outline-none focus:border-primary">
+          <option *ngFor="let c of companies" [value]="c">{{ c }}</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-[0.71rem] font-semibold text-on-var uppercase tracking-[0.9px] mb-1.5">Alert Level</label>
+        <select [(ngModel)]="feedAlert" (change)="loadFeed()" class="w-full bg-surf-2 border border-border-med rounded-xl px-3 py-2 text-[0.85rem] text-on-surf focus:outline-none focus:border-primary">
+          <option value="All Alerts">All Alerts</option>
+          <option value="HIGH PRIORITY">HIGH PRIORITY</option>
+          <option value="MEDIUM">MEDIUM</option>
+          <option value="LOW">LOW</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-[0.71rem] font-semibold text-on-var uppercase tracking-[0.9px] mb-1.5">Post Type</label>
+        <select [(ngModel)]="feedType" (change)="loadFeed()" class="w-full bg-surf-2 border border-border-med rounded-xl px-3 py-2 text-[0.85rem] text-on-surf focus:outline-none focus:border-primary">
+          <option *ngFor="let t of feedTypes" [value]="t">{{ t }}</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-[0.71rem] font-semibold text-on-var uppercase tracking-[0.9px] mb-1.5">Date Range</label>
+        <select [(ngModel)]="feedDays" (change)="loadFeed()" class="w-full bg-surf-2 border border-border-med rounded-xl px-3 py-2 text-[0.85rem] text-on-surf focus:outline-none focus:border-primary">
+          <option *ngFor="let opt of feedDaysOptions" [value]="opt">{{ opt }}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Feed Items -->
+    <div *ngFor="let p of paginatedPosts" class="bg-surf-1 border border-border rounded-2xl p-[18px] mb-2.5 transition-all duration-200 hover:border-border-med hover:bg-surf-2 hover:shadow-2xl hover:-translate-y-[1px]">
+      
+      <!-- Header row -->
+      <div class="flex items-center gap-[7px] flex-wrap mb-2.5">
+        <span class="text-[0.9rem] font-semibold text-on-surf">{{ p.company }}</span>
+        
+        <!-- Alert Pill -->
+        <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-[0.67rem] font-semibold tracking-[0.3px] whitespace-nowrap border"
+          [ngClass]="{
+            'bg-error/10 text-red-300 border-error/20': p.analysis?.alert_tag === 'HIGH PRIORITY',
+            'bg-warning/10 text-yellow-300 border-warning/20': p.analysis?.alert_tag === 'MEDIUM',
+            'bg-success/10 text-green-300 border-success/20': p.analysis?.alert_tag === 'LOW' || !p.analysis?.alert_tag
+          }">
+          {{ p.analysis?.alert_tag || 'LOW' }}
+        </span>
+
+        <!-- Tag Pill -->
+        <span *ngIf="p.analysis?.content_classification" class="inline-flex items-center px-2 py-0.5 rounded-lg text-[0.67rem] font-semibold tracking-[0.3px] whitespace-nowrap border bg-purple-500/10 text-purple-300 border-purple-500/20">
+          {{ p.analysis?.content_classification }}
+        </span>
+
+        <!-- Type Pill -->
+        <span *ngIf="p.post_type" class="inline-flex items-center px-2 py-0.5 rounded-lg text-[0.67rem] font-semibold tracking-[0.3px] whitespace-nowrap border bg-primary/10 text-blue-300 border-primary/20">
+          {{ p.post_type }}
+        </span>
+
+        <span class="text-[0.72rem] text-on-var ml-auto whitespace-nowrap">{{ p.timestamp | date:'dd MMM yyyy' }}</span>
+      </div>
+
+      <!-- Post Snapshot -->
+      <div class="text-[0.88rem] text-slate-300 leading-relaxed mb-2.5">
+        {{ (p.analysis?.executive_snapshot || p.text | slice:0:160) + (p.analysis?.executive_snapshot ? '' : '...') }}
+      </div>
+
+      <!-- Recommended Action Box -->
+      <div *ngIf="p.analysis?.recommended_action" class="flex gap-2 items-start bg-success/5 border-l-2 border-success rounded-r-lg px-3 py-2 mb-3">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#10B981" class="mt-[3px] shrink-0"><path [attr.d]="iconBolt"/></svg>
+        <span class="text-[0.81rem] text-[#A7F3D0] leading-relaxed whitespace-pre-wrap">{{ p.analysis.recommended_action }}</span>
+      </div>
+
+      <!-- Footer Stats Row -->
+      <div class="flex items-center gap-4 pt-2.5 border-t border-border">
+        <span class="flex items-center gap-1.5 text-[0.77rem] text-on-var">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#8892A8"><path [attr.d]="iconThumb"/></svg> {{ p.likes | number }}
+        </span>
+        <span class="flex items-center gap-1.5 text-[0.77rem] text-on-var">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#8892A8"><path [attr.d]="iconChat"/></svg> {{ p.comments | number }}
+        </span>
+        <span class="flex items-center gap-1.5 text-[0.77rem] text-on-var">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#8892A8"><path [attr.d]="iconRepeat"/></svg> {{ p.shares | number }}
+        </span>
+
+        <span class="ml-auto bg-primary-dim text-primary rounded-lg px-2.5 py-0.5 text-[0.72rem] font-medium tabular-nums">
+          Eng {{ p.engagement_score | number }}
+        </span>
+      </div>
+
+      <div class="mt-4 flex gap-4">
+        <button class="btn-outline flex items-center gap-1" (click)="draftCounterPost(p)" [disabled]="isGeneratingDraft[p.id]">
+          <svg *ngIf="!isGeneratingDraft[p.id]" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#93C5FD"><path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/></svg>
+          {{ isGeneratingDraft[p.id] ? 'Drafting...' : 'Draft Counter-Post' }}
+        </button>
+      </div>
+
+      <div *ngIf="generatedDrafts[p.id]" class="markdown-body mt-4 p-4 bg-surf-2 border border-border rounded-xl text-sm text-slate-200" [innerHTML]="getParsedDraft(generatedDrafts[p.id])">
+      </div>
+      
+    </div>
+    
+    <div class="flex items-center justify-between mt-6 pt-4 border-t border-border" *ngIf="posts.length > 0">
+      <div class="text-[0.8rem] text-on-var">
+        Showing {{ (feedCurrentPage - 1) * feedPageSize + 1 }} to {{ Math.min(feedCurrentPage * feedPageSize, posts.length) }} of {{ posts.length }} posts
+      </div>
+      <div class="flex gap-2">
+        <button class="btn-outline px-3" (click)="prevPage()" [disabled]="feedCurrentPage === 1">Previous</button>
+        <button class="btn-outline px-3" (click)="nextPage()" [disabled]="feedCurrentPage === totalPages">Next</button>
+      </div>
+    </div>
+    
+    <div class="text-center py-6 text-on-var text-sm" *ngIf="posts.length === 0">
+      No posts match the selected filters.
+    </div>
+
+  </div>
+
+</div>

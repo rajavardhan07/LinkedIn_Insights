@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-bg text-on-surf font-sans antialiased m-0 p-0;
+  }
+}
+
+@layer components {
+  .btn-outline {
+    @apply px-4 py-1.5 rounded-xl border border-primary/25 bg-surf-2 text-[#93C5FD] text-sm font-medium transition-all duration-200 hover:bg-primary-med hover:border-primary disabled:opacity-30;
+  }
+  
+  .btn-download {
+    @apply px-4 py-1.5 rounded-xl border border-primary/25 bg-primary-dim text-[#93C5FD] text-sm font-medium transition-all duration-200 hover:bg-primary-med hover:border-primary w-full;
+  }
+
+  .kpi-card {
+    @apply bg-surf-1 border border-white/5 rounded-[18px] p-5 flex flex-col gap-2 relative overflow-hidden transition-all duration-200 hover:border-white/10 hover:-translate-y-0.5 hover:shadow-2xl;
+  }
+
+  .sec-hdr {
+    @apply flex items-center gap-2.5 mt-[30px] mb-3.5;
+  }
+  
+  .sec-accent {
+    @apply w-[3px] h-[18px] bg-primary rounded-sm shrink-0;
+  }
+  
+  .sec-title {
+    @apply text-[11.5px] font-bold text-on-var uppercase tracking-[1.6px] flex items-center gap-2;
+  }
+  
+  .sec-line {
+    @apply flex-1 h-px bg-white/5;
+  }
+
+  .bordered-container {
+    @apply bg-surf-1 border border-white/10 rounded-[18px] p-4;
+  }
+}
