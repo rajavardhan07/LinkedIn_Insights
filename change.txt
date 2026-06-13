@@ -1,0 +1,19 @@
+Here's what was changed:
+
+File: 
+
+backend/config/companies.py
+diff
+"The Hartford India": {
+-    "universal_name": "the-hartford",
+-    "id": 2467,
++    "universal_name": "the-hartford-india",
++    "id": None,  # will be resolved automatically via API
+ },
+What this does:
+
+universal_name is the LinkedIn company page slug (the part after linkedin.com/company/).
+Previously it was set to "the-hartford" (the US parent company), so the app was fetching posts from the wrong page.
+Changed it to "the-hartford-india" which matches the actual India page URL: linkedin.com/company/the-hartford-india.
+Set id to None so the app automatically resolves the correct numeric company ID from the new slug via the LinkdAPI on the next fetch.
+That's the only change — one slug, one ID reset. Everything else in the pipeline (fetcher, resolver, storage) works automatically from this config.
