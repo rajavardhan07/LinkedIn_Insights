@@ -17,3 +17,16 @@ Previously it was set to "the-hartford" (the US parent company), so the app was 
 Changed it to "the-hartford-india" which matches the actual India page URL: linkedin.com/company/the-hartford-india.
 Set id to None so the app automatically resolves the correct numeric company ID from the new slug via the LinkdAPI on the next fetch.
 That's the only change — one slug, one ID reset. Everything else in the pipeline (fetcher, resolver, storage) works automatically from this config.
+
+
++    "Allstate India": {
++        "universal_name": "allstate-india",
++        "id": None,  # will be resolved automatically via API
++    },
+ }
+What this does:
+
+Added a new entry "Allstate India" to the COMPANY_REGISTRY dictionary.
+universal_name is set to "allstate-india" which matches their LinkedIn page URL: linkedin.com/company/allstate-india.
+id is set to None so the app automatically resolves the correct numeric company ID from the slug via the LinkdAPI on the first fetch.
+No other code changes needed — the entire pipeline (fetcher, resolver, storage, API, frontend) picks up new companies from this registry automatically.
