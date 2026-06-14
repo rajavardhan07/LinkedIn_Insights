@@ -40,4 +40,5 @@ def validate_config() -> None:
         raise ValueError(
             "LINKDAPI_API_KEY is not set. "
             "Add your API key to the .env file in the project root."
+            #rnd-GJVz6ksC1tT4gcLlp5fG5LZsQX0fS4hD_2pH58Ic7S1HASOwR6J5aoOb27VWYKgJ4PEgIBY8dgmXiPfqCOUoeazevxPh8g
         )
